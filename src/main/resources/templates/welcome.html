@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Welcome</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" type="text/css" href="../static/css/main.css" th:href="@{css/main.css}"/>
+        <link rel="stylesheet" type="text/css" href="../static/bootstrap/3.3.7/css/bootstrap.min.css" th:href="@{webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    </head>
+    <body>
+        <div th:replace="header :: menu"/>
+        <div class="container">
+            <div class="well">
+                <h1>Spring Boot Web Thymeleaf + Bootstrap + jQuery Example</h1>
+                <h2>Message from Controller: <span th:text="${message}">message</span></h2>
+            </div>
+	    <div class="panel panel-default">
+		<div class="panel-heading">
+		    <h3 class="panel-title">Users from Controller by REST Service</h3>
+		</div>
+		<div class="panel-body">
+		    <div class="row">
+			<div class="col-md-12">
+			    <ul>
+				<li th:each="ins : ${instructions}" th:text="${ins}">instruction</li>
+			    </ul>
+			</div>
+		    </div>
+		    <div class="form-group">
+			<div class="input-group">
+			    <div class="input-group-btn">
+				<button id="myButton" class="btn btn-primary">Get All Users</button>
+			    </div>
+			    <input id="myInput" type="text" placeholder="Search..." class="form-control"/>
+			</div>
+		    </div>
+		    <table id="myTable" class="table table-bordered">
+			<thead>
+			    <tr>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Age</th>
+			    </tr>
+			</thead>
+			<tbody>
+			    <tr id="data">
+				<td class="text-center text-danger" colspan="3">No items found</td>
+			    </tr>
+			</tbody>
+		    </table>
+		</div>
+	    </div>
+        </div>
+        <script type="text/javascript" src="../static/jquery/3.3.1/jquery.min.js" th:src="@{webjars/jquery/3.3.1/jquery.min.js}"></script>
+        <script type="text/javascript" src="../static/bootstrap/3.3.7/js/bootstrap.min.js" th:src="@{webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$("#myInput").on("keyup", function() {
+			var value = $(this).val().toLowerCase();
+			$("#myTable tbody tr").filter(function() {
+				$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+			});
+		});
+		$("#myButton").on("click", function() {
+			$.get("/spring-demo-th/users", function(data) {
+				$("#myTable tbody tr").remove();
+				function setCol(value) {
+					$("#myTable tbody").append("<tr><td>"+value.firstName+"</td><td>"+value.lastName+"</td><td>"+value.age+"</td></tr>");
+				}
+				data.users.forEach(setCol);
+			});
+		});
+	});
+	</script>
+    </body>
+</html>
