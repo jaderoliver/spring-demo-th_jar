@@ -19,4 +19,11 @@ public class WelcomeController {
         return view;
     }
 
+    @GetMapping("/datatable")
+    public ModelAndView data() {
+        ModelAndView view = new ModelAndView("datatable");
+        view.addObject("instructions", Arrays.asList("First, look at data comming from server", "Next, interact with datatable and be happy"));
+        return view;
+    }
+
 }
